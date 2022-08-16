@@ -89,5 +89,4 @@ class User3(User):
 
 
 if __name__ == "__main__":
-    print(tomorrow)
-    print(User2().to_json())
+    print(User1().to_json())

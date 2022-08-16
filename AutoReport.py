@@ -30,13 +30,13 @@ class AutoReport:
     def request(self, method, url, raw=False, **kwargs):
         resp = self.session.request(method, url, headers=self.headers, **kwargs)
 
-        if not resp.ok:  # 校验 status_code
+        if not resp.ok:
             raise Exception("error in resp.ok")
 
         if raw:
             return resp
 
-        resp_json = resp.json()  # 校验 success 字段
+        resp_json = resp.json()
         if not resp_json.get('success'):
             msg = resp_json.get("msg")
             raise Exception(msg)
@@ -86,12 +86,10 @@ class AutoReport:
         print(resq.get("msg"))
 
     def run(self, data):
-        # print(self.pku.session.cookies)
         self.login1()
         self.login2()
         self.get_sid()
         self.get_cookies()
-
         self.save_first(data)
         self.submit()
 
