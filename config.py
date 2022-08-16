@@ -14,12 +14,12 @@ class User:
         self.from_location = "燕园"
         self.to_location = "校外（社会面）"
         self.gate = "南门"
-        self.detailed_reason = "实习"
+        self.detailed_reason = "学习"
         self.country = "156"  # 中国
         self.province = "11"  # 北京
         self.city = "01"  # 市辖区
         self.district = "08"  # 海淀
-        self.street = "燕园路街道 "
+        self.street = "燕园街道 "
         self.detailed_route = "南门"
         self.email = "1111111111@qq.com"
         self.phone_number = "11111111111"
