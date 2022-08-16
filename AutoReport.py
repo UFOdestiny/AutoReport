@@ -29,13 +29,10 @@ class AutoReport:
 
     def request(self, method, url, raw=False, **kwargs):
         resp = self.session.request(method, url, headers=self.headers, **kwargs)
-
         if not resp.ok:
             raise Exception("error in resp.ok")
-
         if raw:
             return resp
-
         resp_json = resp.json()
         if not resp_json.get('success'):
             msg = resp_json.get("msg")
@@ -61,7 +58,6 @@ class AutoReport:
 
     def login2(self):
         self.get(self.redirUrl, params={'rand': random.random(), 'token': self.token1})
-
         resp_json = self.get(self.auth_url2)
         self.token2 = parse_qs(resp_json.url)['token'][0]
 
@@ -74,7 +70,6 @@ class AutoReport:
         self.get(url_cookies)
 
     def save_first(self, data):
-
         url_save = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/saveSqxx?sid={self.sid}&_sk={self.username}"
         resq = self.post(url_save, json=data)
         print(resq.get("msg"))
