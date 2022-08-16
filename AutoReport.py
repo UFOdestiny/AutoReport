@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-# @Name     : IAAA.py
-# @Date     : 2022/8/16 9:28
-# @Auth     : Yu Dahai
-# @Email    : yudahai@pku.edu.cn
-# @Desc     :
-
 import random
 from urllib.parse import parse_qs
 import requests
-from config import User1
 
+from config import User1
 
 
 class AutoReport:
