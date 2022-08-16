@@ -19,13 +19,13 @@ class User:
         self.province = "11"  # 北京
         self.city = "01"  # 市辖区
         self.district = "08"  # 海淀
-        self.street = "学院路街道 "
+        self.street = "燕园路街道 "
         self.detailed_route = "南门"
-        self.email = "12345678@qq.com"
-        self.phone_number = "12345678"
+        self.email = "1111111111@qq.com"
+        self.phone_number = "11111111111"
         self.campus = "燕园"
-        self.dormitory = "燕园-1楼"
-        self.room_number = "1902"
+        self.dormitory = "燕园11楼"
+        self.room_number = "111"
 
     def to_json(self):
         empty_json = {
@@ -70,8 +70,8 @@ class User:
 class User1(User):
     def __init__(self):
         super().__init__()
-        self.username = "1224131"
-        self.password = "231414"
+        self.username = "1111111111"
+        self.password = "111111"
 
 
 class User2(User):
