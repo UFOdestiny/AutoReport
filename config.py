@@ -27,7 +27,7 @@ class User:
         self.dormitory = "燕园11楼"
         self.room_number = "111"
 
-        self.route = "北京市"  # 行程码路径
+        self.route = "北京市"  # 行程码路径，切记一定与真实路径完全一致！
 
     def to_json(self):
         empty_json = {
