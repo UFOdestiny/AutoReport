@@ -6,7 +6,7 @@ class TripCard:
     def __init__(self,
                  jpg_path="TripCard.png",  # 行程码图片保存地址
                  executable_path='chromedriver.exe'):  # chromedriver.exe地址
-        #引入用户
+        # 引入用户
         user = User1()
 
         self.html = f"https://tripcard.pages.dev/#{user.phone_number}&{user.route}"
