@@ -14,18 +14,18 @@ class User:
         self.from_location = "燕园"
         self.to_location = "校外（社会面）"
         self.gate = "南门"
-        self.detailed_reason = "学习"
+        self.detailed_reason = "实习"
         self.country = "156"  # 中国
         self.province = "11"  # 北京
         self.city = "01"  # 市辖区
         self.district = "08"  # 海淀
-        self.street = "燕园街道 "
-        self.detailed_route = "南门"
-        self.email = "1111111111@qq.com"
-        self.phone_number = "11111111111"
+        self.street = "学院路街道 "
+        self.detailed_route = "南门-392路（海淀桥东—保福寺桥北）-财智国际大厦"
+        self.email = "1976438440@qq.com"
+        self.phone_number = "15964938382"
         self.campus = "燕园"
-        self.dormitory = "燕园11楼"
-        self.room_number = "111"
+        self.dormitory = "燕园37楼"
+        self.room_number = "317"
 
         self.route = "北京市"  # 路径
 
@@ -72,23 +72,32 @@ class User:
 class User1(User):
     def __init__(self):
         super().__init__()
-        self.username = "1111111111"
-        self.password = "111111"
+        self.username = "1900016644"
+        self.password = "YUDAHAIhenniu123"
 
 
 class User2(User):
     def __init__(self):
         super().__init__()
-        self.username = ""
-        self.password = ""
+        self.username = "1900016603"
+        self.password = "XKLBUER2"
 
 
 class User3(User):
     def __init__(self):
         super().__init__()
-        self.username = ""
-        self.password = ""
+        self.username = "1900016630"
+        self.password = "cos(60*)"
+
+
+class User4(User):
+    def __init__(self):
+        super().__init__()
+        self.username = "1900016606"
+        self.password = "7u5pk8bp9vLDL"
+        self.route = "北京市"
 
 
 if __name__ == "__main__":
-    print(User1().to_json())
+    print(tomorrow)
+    print(User2().to_json())

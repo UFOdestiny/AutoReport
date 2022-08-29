@@ -1,8 +1,16 @@
 import random
 from urllib.parse import parse_qs
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+from tripcard import TripCard
 
-from config import User1
+# from config2 import User1
+from config2 import User1
+
+
+class AlreadyExist(Exception):
+    """ 已存在某日的出入校申请记录 """
+    pass
 
 
 class AutoReport:
@@ -27,8 +35,11 @@ class AutoReport:
         self.session = requests.session()
         self.session.trust_env = False
 
-    def request(self, method, url, raw=False, **kwargs):
-        resp = self.session.request(method, url, headers=self.headers, **kwargs)
+    def request(self, method, url, raw=False, headers=None, **kwargs):
+        if not headers:
+            headers = self.headers
+
+        resp = self.session.request(method, url, headers=headers, **kwargs)
         if not resp.ok:
             raise Exception("error in resp.ok")
         if raw:
@@ -36,6 +47,8 @@ class AutoReport:
         resp_json = resp.json()
         if not resp_json.get('success'):
             msg = resp_json.get("msg")
+            if "已存在" in msg:
+                raise AlreadyExist
             raise Exception(msg)
 
         return resp_json
@@ -69,11 +82,30 @@ class AutoReport:
         url_cookies = f'https://simso.pku.edu.cn/pages/sadEpidemicAccess.html?_sk={self.username}#/epiAccessHome'
         self.get(url_cookies)
 
+    def get_row(self):
+        url_row = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/getSqxxHis?sid={self.sid}&_sk={self.username}&pageNum=1"
+        resq = self.get(url_row, raw=False)
+        self.row = resq.get("row")[0]["sqbh"]
+
     def save_first(self, data):
         url_save = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/saveSqxx?sid={self.sid}&_sk={self.username}"
-        resq = self.post(url_save, json=data)
-        print(resq.get("msg"))
-        self.row = resq.get("row")
+        try:
+            resq = self.post(url_save, json=data)
+            print(resq.get("msg"))
+            self.row = resq.get("row")
+        except AlreadyExist:
+            self.get_row()
+
+    def upload_img(self):
+        url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
+        file_payload = {"cldms": "xcm",
+                        'files': ('TripCard.png', open('TripCard.png', 'rb'), 'image/png'),
+                        "sqbh": self.row}
+
+        header_img = self.headers
+        m = MultipartEncoder(file_payload)
+        header_img['Content-Type'] = m.content_type
+        self.post(url_img, data=m, headers=header_img)
 
     def submit(self):
         url_submit = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/submitSqxx?sid={self.sid}&sqbh={self.row}&_sk={self.username}"
@@ -85,12 +117,16 @@ class AutoReport:
         self.login2()
         self.get_sid()
         self.get_cookies()
+
         self.save_first(data)
+        self.upload_img()
         self.submit()
 
 
 class Execute:
     def __init__(self, user):
+        TripCard().run()
+
         u = user()
         simso = AutoReport(u.username, u.password)
         simso.run(u.to_json())
