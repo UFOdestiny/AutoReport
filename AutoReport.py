@@ -2,8 +2,9 @@ import random
 from urllib.parse import parse_qs
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-from tripcard import TripCard
+from TripCard import TripCard
 
+# from config2 import User1
 from config import User1
 
 
