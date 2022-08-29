@@ -7,6 +7,7 @@ class TripCard:
                  jpg_path="TripCard.png",
                  executable_path='chromedriver.exe'):
         user = User1()
+
         self.html = f"https://tripcard.pages.dev/#{user.phone_number}&{user.route}"
 
         self.jpg_path = jpg_path
