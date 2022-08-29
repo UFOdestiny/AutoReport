@@ -22,12 +22,12 @@ class User:
         self.street = "燕园街道 "
         self.detailed_route = "南门"
         self.email = "1111111111@qq.com"
-        self.phone_number = "11111111111"
+        self.phone_number = "11111111111"  # 电话号码与行程码电话号码
         self.campus = "燕园"
         self.dormitory = "燕园11楼"
         self.room_number = "111"
 
-        self.route = "北京市"  # 路径
+        self.route = "北京市"  # 行程码路径
 
     def to_json(self):
         empty_json = {

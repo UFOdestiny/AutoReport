@@ -4,8 +4,8 @@ from config2 import User1
 
 class TripCard:
     def __init__(self,
-                 jpg_path="TripCard.png",
-                 executable_path='chromedriver.exe'):
+                 jpg_path="TripCard.png",  # 行程码图片保存地址
+                 executable_path='chromedriver.exe'):  # chromedriver.exe地址
         user = User1()
 
         self.html = f"https://tripcard.pages.dev/#{user.phone_number}&{user.route}"
