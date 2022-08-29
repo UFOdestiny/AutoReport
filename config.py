@@ -9,7 +9,6 @@ class User:
         self.username = ""
         self.password = ""
 
-
         self.time = tomorrow
         self.reason_out = "学业"
         self.from_location = "燕园"
