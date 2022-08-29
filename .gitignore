@@ -4,4 +4,5 @@ __pycache__
 TripCard.png
 chromedriver.exe
 config2.py
+config.py
 tripcard
