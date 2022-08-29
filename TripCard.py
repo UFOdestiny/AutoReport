@@ -1,5 +1,5 @@
 from selenium import webdriver
-from config2 import User1
+from config import User1
 
 
 class TripCard:
