@@ -14,7 +14,7 @@
 
 ### 通信大数据行程卡
 
-借用 https://github.com/ilovexjp/trip-card 项目提供的网页，使用selenium截图。
+借用[trip-card](https://github.com/ilovexjp/trip-card)提供的网页，使用selenium截图。
 
 也可以使用手机截图上传。
 
