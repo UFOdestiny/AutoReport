@@ -3,7 +3,7 @@ from urllib.parse import parse_qs
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from TripCard import TripCard
-
+import os
 # from config2 import User1
 from config import User1
 
@@ -152,7 +152,7 @@ class AutoReport:
             """
             self.get_row()
 
-    def upload_img(self):
+    def upload_tripcode(self):
         """
         上传行程码图片
         :return:
@@ -160,6 +160,23 @@ class AutoReport:
         url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
         file_payload = {"cldms": "xcm",
                         'files': ('TripCard.png', open('TripCard.png', 'rb'), 'image/png'),
+                        "sqbh": self.row}
+
+        header_img = self.headers
+        data = MultipartEncoder(file_payload)
+        header_img['Content-Type'] = data.content_type
+        self.post(url_img, data=data, headers=header_img)
+
+    def upload_jkb(self):
+        """
+        上传北京健康宝图片
+        :return:
+        """
+        bjjkb = [i for i in os.listdir() if i[-3:] == "png" and i != "TripCard.png"][0]
+
+        url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
+        file_payload = {"cldms": "bjjkb",
+                        'files': ('TripCard.png', open(bjjkb, 'rb'), 'image/png'),
                         "sqbh": self.row}
 
         header_img = self.headers
@@ -183,7 +200,8 @@ class AutoReport:
         self.get_cookies()
 
         self.save_first(data)
-        self.upload_img()
+        self.upload_tripcode()
+        self.upload_jkb()
         self.submit()
 
 
