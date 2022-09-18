@@ -13,7 +13,7 @@ class AlreadyExist(Exception):
     pass
 
 
-class AutoReport:
+class AutoReport(User1):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                              "Chrome/80.0.3987.163 Safari/537.36 Edg/80.0.361.111", }
 
@@ -22,10 +22,10 @@ class AutoReport:
     appid = 'portal2017'
     redirUrl = "https://portal.pku.edu.cn/portal2017/ssoLogin.do"
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def __init__(self):
+        super().__init__()
 
+        self.data = None
         self.token1 = None
         self.token2 = None
 
@@ -135,22 +135,28 @@ class AutoReport:
         resq = self.get(url_row, raw=False)
         self.row = resq.get("row")[0]["sqbh"]
 
-    def save_first(self, data):
+    def save_first(self):
         """
         保存设置信息
         :param data:
         :return:
         """
         url_save = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/saveSqxx?sid={self.sid}&_sk={self.username}"
+        self.data = self.to_json()
         try:
-            resq = self.post(url_save, json=data)
+            resq = self.post(url_save, json=self.data)
             print(resq.get("msg"))
             self.row = resq.get("row")
         except AlreadyExist:
+
             """
             如果当天已经存在申请信息，则直接上传图片与申请即可
             """
             self.get_row()
+            self.data["sqbh"] = self.row
+            resq = self.post(url_save, json=self.data)
+            print(resq.get("msg"))
+            self.row = resq.get("row")
 
     def upload_tripcode(self):
         """
@@ -159,7 +165,7 @@ class AutoReport:
         """
         url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
         file_payload = {"cldms": "xcm",
-                        'files': ('TripCard.png', open('TripCard.png', 'rb'), 'image/png'),
+                        'files': ('TripCard.png', open(f'{self.path}/TripCard.png', 'rb'), 'image/png'),
                         "sqbh": self.row}
 
         header_img = self.headers
@@ -176,7 +182,7 @@ class AutoReport:
 
         url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
         file_payload = {"cldms": "bjjkb",
-                        'files': ('TripCard.png', open(bjjkb, 'rb'), 'image/png'),
+                        'files': ('TripCard.png', open(f'{self.path}/{bjjkb}', 'rb'), 'image/png'),
                         "sqbh": self.row}
 
         header_img = self.headers
@@ -193,30 +199,18 @@ class AutoReport:
         resq = self.get(url_submit, raw=False)
         print(resq.get("msg"))
 
-    def run(self, data):
+    def run(self):
         self.login1()
         self.login2()
         self.get_sid()
         self.get_cookies()
 
-        self.save_first(data)
+        self.save_first()
         self.upload_tripcode()
         self.upload_jkb()
         self.submit()
 
 
-class Execute:
-    def __init__(self, user):
-        """
-        执行
-        :param user: 用户类
-        """
-        TripCard().run()  # 获取模拟行程码
-
-        u = user()
-        simso = AutoReport(u.username, u.password)
-        simso.run(u.to_json())
-
-
 if __name__ == "__main__":
-    Execute(User1)
+    TripCard().run()
+    AutoReport().run()
