@@ -1,7 +1,4 @@
 .git
 .idea
 __pycache__
-TripCard.png
-chromedriver.exe
-config_.py
-tripcard_html
+config.py

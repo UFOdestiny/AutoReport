@@ -1,11 +1,10 @@
-import random
-from urllib.parse import parse_qs
-import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-from TripCard import TripCard
 import os
-# from config2 import User1
-from config import User1
+import random
+import requests
+from urllib.parse import parse_qs
+from config_ import User1
+
+os.environ['no_proxy'] = '*'
 
 
 class AlreadyExist(Exception):
@@ -144,9 +143,9 @@ class AutoReport(User1):
         url_save = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/saveSqxx?sid={self.sid}&_sk={self.username}"
         self.data = self.to_json()
         try:
-            resq = self.post(url_save, json=self.data)
-            print(resq.get("msg"))
-            self.row = resq.get("row")
+            res = self.post(url_save, json=self.data)
+            print(res.get("msg"))
+            self.row = res.get("row")
         except AlreadyExist:
 
             """
@@ -154,49 +153,17 @@ class AutoReport(User1):
             """
             self.get_row()
             self.data["sqbh"] = self.row
-            resq = self.post(url_save, json=self.data)
-            print(resq.get("msg"))
-            self.row = resq.get("row")
-
-    def upload_tripcode(self):
-        """
-        上传行程码图片
-        :return:
-        """
-        url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
-        file_payload = {"cldms": "xcm",
-                        'files': ('TripCard.png', open(f'{self.path}/TripCard.png', 'rb'), 'image/png'),
-                        "sqbh": self.row}
-
-        header_img = self.headers
-        data = MultipartEncoder(file_payload)
-        header_img['Content-Type'] = data.content_type
-        self.post(url_img, data=data, headers=header_img)
-
-    def upload_jkb(self):
-        """
-        上传北京健康宝图片
-        :return:
-        """
-        bjjkb = [i for i in os.listdir() if i[-3:] == "png" and i != "TripCard.png"][0]
-
-        url_img = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/uploadZmcl?sid={self.sid}&_sk={self.username}"
-        file_payload = {"cldms": "bjjkb",
-                        'files': ('TripCard.png', open(f'{self.path}/{bjjkb}', 'rb'), 'image/png'),
-                        "sqbh": self.row}
-
-        header_img = self.headers
-        data = MultipartEncoder(file_payload)
-        header_img['Content-Type'] = data.content_type
-        self.post(url_img, data=data, headers=header_img)
+            res = self.post(url_save, json=self.data)
+            print(res.get("msg"))
+            self.row = res.get("row")
 
     def submit(self):
         """
         提交申请
         :return:
         """
-        url_submit = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/submitSqxx?sid={self.sid}&sqbh={self.row}&_sk={self.username}"
-        resq = self.get(url_submit, raw=False)
+        url = f"https://simso.pku.edu.cn/ssapi/stuaffair/epiApply/submitSqxx?sid={self.sid}&sqbh={self.row}&_sk={self.username}"
+        resq = self.get(url, raw=False)
         print(resq.get("msg"))
 
     def run(self):
@@ -206,11 +173,9 @@ class AutoReport(User1):
         self.get_cookies()
 
         self.save_first()
-        self.upload_tripcode()
-        self.upload_jkb()
+
         self.submit()
 
 
 if __name__ == "__main__":
-    TripCard().run()
     AutoReport().run()
